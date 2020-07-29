@@ -13,7 +13,6 @@ installgit()
 
 installdocker()
 {
-        sudo yum update -y
         sudo yum install docker -y
         docker -v
         sudo service docker start
@@ -33,6 +32,17 @@ dockercompose()
         if [ $? -ne 0 ];
         then
                 echo "something is wrong with docker compose"
+                exit 0
+        fi
+}
+
+installmaven()
+{
+        sudo yum install maven -y
+        mvn -version
+        if [ $? -ne 0 ];
+        then
+                echo "something is wrong with maven"
                 exit 0
         fi
 }
@@ -61,3 +71,17 @@ then
 else
         echo "Docker compose is already installed"
 fi
+#install maven
+mvn -version
+if [ $? -ne 0 ];
+then
+        echo "Maven  is not installed"
+        installmaven
+else
+        echo "Maven is already installed"
+fi
+
+
+#build docker image and run as a container
+mvn clean install
+nohup docker-compose up --build &
