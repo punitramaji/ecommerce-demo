@@ -85,4 +85,4 @@ fi
 
 #build docker image and run as a container
 mvn clean install
-nohup docker-compose up --build &
+docker-compose up --build -d
